@@ -1,4 +1,4 @@
-import { createContext, useState } from 'react';
+import { createContext, useCallback, useState } from 'react';
 import axios from 'axios';
 
 const BooksContext = createContext();
@@ -13,11 +13,12 @@ function Provider({ children }) {
     'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Amz-Date, Authorization, X-Api-Key, X-Amz-Security-Token, locale',
     'Access-Control-Allow-Methods': 'GET, POST',
   }
-  const fetchBooks = async () => {
-    const response = await axios.get(`${baseUrl}/books`,headers);
+  const fetchBooks = useCallback(async () => {
+    const response = await axios.get(`${baseUrl}/books`, headers);
 
     setBooks(response.data);
-  };
+  }, []);
+
 
   const editBookById = async (id, newTitle) => {
     const response = await axios.put(`${baseUrl}/books/${id}`, {
